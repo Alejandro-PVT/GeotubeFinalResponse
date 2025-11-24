@@ -14,6 +14,7 @@ export default function Home() {
   const [videos, setVideos] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+  const [isSearchMode, setIsSearchMode] = useState(false)
 
   useEffect(() => {
     loadTrendingVideos()
@@ -21,6 +22,7 @@ export default function Home() {
 
   const loadTrendingVideos = async () => {
     setLoading(true)
+    setIsSearchMode(false)
     const result = await getTrendingVideos()
     if (result.success) {
       setVideos(result.videos)
@@ -35,6 +37,7 @@ export default function Home() {
     }
 
     setLoading(true)
+    setIsSearchMode(true)
     const result = await searchVideos(searchQuery)
     if (result.success) {
       setVideos(result.videos)
@@ -81,7 +84,7 @@ export default function Home() {
         {videos.length > 0 && (
           <div>
             <h2 className="text-2xl font-bold mb-4">
-              {searchQuery ? `${videos.length} ${t.videosFoundCount}` : t.trendingVideos}
+              {isSearchMode ? `${videos.length} ${t.videosFoundCount}` : t.trendingVideos}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {videos.map((video) => (
